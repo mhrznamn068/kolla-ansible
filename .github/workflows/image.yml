@@ -22,7 +22,7 @@ jobs:
         sed -i 's/#enable_cinder: "no"/enable_cinder: "yes"/g' etc/kolla/globals.yml
 
     - name: Pull images from kolla official registry
-      uses: mhrznamn068/kolla-actions@v2
+      uses: mhrznamn068/kolla-actions@v3
       with:
         registry: ${{ secrets.CONTAINER_REGISTRY }}
         port: 5000
