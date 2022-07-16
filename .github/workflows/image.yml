@@ -1,0 +1,28 @@
+name: Kolla Ansible Image
+
+on:
+  push:
+    branches: [custom]
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, dcrunner1]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        pip3 install .
+        kolla-ansible install-deps
+
+    - name: Config file
+      run: |
+        sed -i 's/#kolla_base_distro.*/kolla_base_distro: "ubuntu"/g' etc/kolla/globals.yml
+        sed -i 's/#enable_cinder: "no"/enable_cinder: "yes"/g' etc/kolla/globals.yml
+
+    - name: Pull images from kolla official registry
+      uses: mhrznamn068/kolla-actions@v2
+      with:
+        registry: '10.71.133.10'
+        port: 5000
